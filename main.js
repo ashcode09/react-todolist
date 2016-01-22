@@ -2,9 +2,9 @@ var ToDo = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <li>
         {this.props.children}
-      </div>
+      </li>
     );
   }
 });
@@ -18,15 +18,21 @@ var List = React.createClass({
       todos: []
     };
   },
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return nextProps.id !== this.props.id;
-  },
   add: function() {
     var addToList = document.getElementById('newTodoToAdd').value;
     var toDoList = this.state.todos.concat([addToList])
     this.setState({todos: toDoList}, function() {
+      document.getElementById('newTodoToAdd').value = "";
       this.forceUpdate();
     });
+  },
+  eachTodo: function(todo, i) {
+    return (
+      <ToDo
+        key={i}>
+        {todo}
+      </ToDo>
+    );
   },
   render: function() {
     return (
@@ -39,7 +45,7 @@ var List = React.createClass({
           type="submit"
           value="submit"
           onClick={this.add} />
-        <div>{this.state.todos}</div>
+        <ul>{this.state.todos.map(this.eachTodo)}</ul>
       </div>
     );
   }
