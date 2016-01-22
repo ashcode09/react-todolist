@@ -20,11 +20,13 @@ var List = React.createClass({
   },
   add: function() {
     var addToList = document.getElementById('newTodoToAdd').value;
-    var toDoList = this.state.todos.concat([addToList])
-    this.setState({todos: toDoList}, function() {
-      document.getElementById('newTodoToAdd').value = "";
-      this.forceUpdate();
-    });
+    if (addToList !== "") {
+      var toDoList = this.state.todos.concat([addToList])
+      this.setState({todos: toDoList}, function() {
+        document.getElementById('newTodoToAdd').value = "";
+        this.forceUpdate();
+      });
+    };
   },
   eachTodo: function(todo, i) {
     return (
@@ -39,11 +41,10 @@ var List = React.createClass({
       <div>
         <input
           id="newTodoToAdd"
-          type="text"
-          value={this.state.newTodo} />
+          type="text" />
         <input
           type="submit"
-          value="submit"
+          value="Add"
           onClick={this.add} />
         <ul>{this.state.todos.map(this.eachTodo)}</ul>
       </div>
