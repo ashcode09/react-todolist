@@ -2,12 +2,26 @@ var ToDo = React.createClass({
 
   render: function() {
     return (
-      <li>
-        {this.props.children}
+      <li
+        className="to-do-component">
+        <table>
+          <tr>
+            <td
+              className="to-do-value">
+              {this.props.children}
+            </td>
+            <td>
+              <input type="checkbox" />
+            </td>
+          </tr>
+        </table>
       </li>
     );
   }
 });
+
+
+
 
 var List = React.createClass({
   getDefaultProps: function() {
@@ -46,7 +60,9 @@ var List = React.createClass({
           type="submit"
           value="Add"
           onClick={this.add} />
-        <ul>{this.state.todos.map(this.eachTodo)}</ul>
+        <ul>
+          {this.state.todos.map(this.eachTodo)}
+        </ul>
       </div>
     );
   }
