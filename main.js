@@ -1,18 +1,25 @@
 var ToDo = React.createClass({
   getInitialState: function() {
     return {
-      editing: false
-    }
+      editing: false, 
+      inputValue: this.props.children
+    };
   },
-
   edit: function() {
     console.log(this.state.editing)
     this.setState({editing: true});
   },
-
   save: function() {
+    console.log(this.props.children)
     this.setState({editing: false});
   },
+  onChange: function(element) {
+    this.setState({ inputValue: element.target.value });
+  },
+
+
+
+
 
   renderEditing: function() {
     return (
@@ -23,9 +30,10 @@ var ToDo = React.createClass({
             <tr>
               <td
                 className="to-do-value">
-                <input
-                  type="text"
-                  value={this.props.children} />
+                <textarea 
+                  ref="newText"
+                  defaultValue={this.state.inputValue}
+                  onChange={this.onChange} />
                 <input
                   type="submit"
                   value="Save"
@@ -42,35 +50,37 @@ var ToDo = React.createClass({
       </li>
     );
   },
-
+  renderSaved: function() {
+    return (
+      <li
+        className="to-do-component">
+        <table>
+          <tbody>
+            <tr>
+              <td
+                className="to-do-value">
+                {this.state.inputValue}
+                <input
+                  type="submit"
+                  value="Edit"
+                  onClick={this.edit} />
+              </td>
+              <td>
+                <input
+                  className="checkbox"
+                  type="checkbox" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    );
+  },
   render: function() {
     if (this.state.editing === true) {
       return this.renderEditing();
     } else {
-      return (
-        <li
-          className="to-do-component">
-          <table>
-            <tbody>
-              <tr>
-                <td
-                  className="to-do-value">
-                  {this.props.children}
-                  <input
-                    type="submit"
-                    value="Edit"
-                    onClick={this.edit} />
-                </td>
-                <td>
-                  <input
-                    className="checkbox"
-                    type="checkbox" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </li>
-      );
+      return this.renderSaved();
     };
   }
 });
