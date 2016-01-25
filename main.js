@@ -24,15 +24,6 @@ var ToDo = React.createClass({
   }
 });
 
-
-
-
-
-
-
-
-
-
 var CompleteToDos = React.createClass({
   render: function() {
     return (
@@ -58,16 +49,6 @@ var CompleteToDos = React.createClass({
   }
 });
 
-
-
-
-
-
-
-
-
-
-
 var List = React.createClass({
   getInitialState: function() {
     return {
@@ -86,9 +67,7 @@ var List = React.createClass({
     };
   },
   markComplete: function() {
-    var completedTasks = this.state.completedTodos;
-    var currentToDos = this.state.todos;
-    var checkboxes = document.getElementsByClassName('checkbox');
+    var completedTasks = this.state.completedTodos, currentToDos = this.state.todos, checkboxes = document.getElementsByClassName('checkbox');
     for (i=checkboxes.length-1; i>=0; i--) {
       if (checkboxes[i].checked) {
         completedTasks.push(currentToDos[i]);
@@ -99,19 +78,7 @@ var List = React.createClass({
     this.setState({completedTodos: completedTasks});
     this.setState({todos: currentToDos});
   },
-
-
-
-
-
-
-
-
-
   removeFromToDoAndCompleted: function(checkboxVarName, stateToUpdate, newState) {
-    
-
-
     for (i=checkboxVarName.length-1; i>=0; i--) {
       if (checkboxVarName[i].checked) {
         newState.splice(i, 1);
@@ -120,34 +87,11 @@ var List = React.createClass({
     };
     this.setState({stateToUpdate: newState});
   },
-
-
-
-
   remove: function() {
-    console.log('removing')
-
-
-    var currentToDos = this.state.todos;
-    var currentCompletedTodos = this.state.completedTodos;
-    var checkboxes = document.getElementsByClassName('checkbox');
-    var completedCheckboxes = document.getElementsByClassName('completedCheckbox');
-
-    this.removeFromToDoAndCompleted(checkboxes, 'todos', currentToDos)
-    this.removeFromToDoAndCompleted(completedCheckboxes, 'completedTodos', currentCompletedTodos)
-
-    console.log(checkboxes)
-    console.log(completedCheckboxes)
+    var currentToDos = this.state.todos, currentCompletedTodos = this.state.completedTodos, checkboxes = document.getElementsByClassName('checkbox'), completedCheckboxes = document.getElementsByClassName('completedCheckbox');
+    this.removeFromToDoAndCompleted(checkboxes, 'todos', currentToDos);
+    this.removeFromToDoAndCompleted(completedCheckboxes, 'completedTodos', currentCompletedTodos);
   },
-
-
-
-
-
-
-
-
-
   eachTodo: function(todo, i) {
     return (
       <ToDo
