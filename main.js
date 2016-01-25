@@ -47,31 +47,17 @@ var List = React.createClass({
       });
     };
   },
-
-
-
-
-
-
   remove: function() {
     var array = this.state.todos;
     var checkboxes = document.getElementsByClassName('checkbox');
     for (i=checkboxes.length-1; i>=0; i--) {
       if (checkboxes[i].checked) {
         array.splice(i, 1);
-        if (i===0) {
-          checkboxes[i].checked = false;
-        };
+        checkboxes[i].checked = false;
       };
     };
     this.setState({todos: array});
   },
-  
-
-
-
-
-
   eachTodo: function(todo, i) {
     return (
       <ToDo
