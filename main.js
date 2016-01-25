@@ -3,17 +3,22 @@ var ToDo = React.createClass({
   render: function() {
     return (
       <li
+        id=""
         className="to-do-component">
         <table>
-          <tr>
-            <td
-              className="to-do-value">
-              {this.props.children}
-            </td>
-            <td>
-              <input type="checkbox" />
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td
+                className="to-do-value">
+                {this.props.children}
+              </td>
+              <td>
+                <input
+                  className="checkbox"
+                  type="checkbox" />
+              </td>
+            </tr>
+          </tbody>
         </table>
       </li>
     );
@@ -42,6 +47,48 @@ var List = React.createClass({
       });
     };
   },
+
+
+
+
+
+
+  remove: function() {
+    var elementsToRemove = [];
+    var array = this.state.todos;
+    var checkboxes = document.getElementsByClassName('checkbox');
+
+
+console.log(array[0])
+console.log(checkboxes[0].key)
+console.log('')
+
+
+    for (i=checkboxes.length-1; i>=0; i--) {
+      console.log(checkboxes[i].checked)
+      if (checkboxes[i].checked) {
+        array.splice(i, 1)
+        console.log(array)
+        console.log(checkboxes)
+      };
+    };
+
+    
+
+
+
+    this.setState({todos: array});
+
+
+        
+      console.log(this.state.todos)
+  },
+  
+
+
+
+
+
   eachTodo: function(todo, i) {
     return (
       <ToDo
@@ -63,6 +110,10 @@ var List = React.createClass({
         <ul>
           {this.state.todos.map(this.eachTodo)}
         </ul>
+        <input
+          type="submit"
+          value="Remove"
+          onClick={this.remove} />
       </div>
     );
   }
