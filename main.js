@@ -3,7 +3,6 @@ var ToDo = React.createClass({
   render: function() {
     return (
       <li
-        id=""
         className="to-do-component">
         <table>
           <tbody>
@@ -28,13 +27,37 @@ var ToDo = React.createClass({
 
 
 
+var CompleteToDos = React.createClass({
+  render: function() {
+    return (
+      <li
+        className="to-do-component">
+        <table>
+          <tbody>
+            <tr>
+              <td
+                className="to-do-component">
+                {this.props.children}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    );
+  }
+});
+
+
+
+
 var List = React.createClass({
   getDefaultProps: function() {
 
   },
   getInitialState: function() {
     return {
-      todos: []
+      todos: [],
+      completedTodos: []
     };
   },
   add: function() {
@@ -47,16 +70,30 @@ var List = React.createClass({
       });
     };
   },
-  remove: function() {
-    var array = this.state.todos;
+  markComplete: function() {
+    var completedTasks = this.state.completedTodos;
+    var currentToDos = this.state.todos;
     var checkboxes = document.getElementsByClassName('checkbox');
     for (i=checkboxes.length-1; i>=0; i--) {
       if (checkboxes[i].checked) {
-        array.splice(i, 1);
+        completedTasks.push(currentToDos[i]);
+        currentToDos.splice(i, 1);
         checkboxes[i].checked = false;
       };
     };
-    this.setState({todos: array});
+    this.setState({completedTodos: completedTasks});
+    this.setState({todos: currentToDos});
+  },
+  remove: function() {
+    var currentToDos = this.state.todos;
+    var checkboxes = document.getElementsByClassName('checkbox');
+    for (i=checkboxes.length-1; i>=0; i--) {
+      if (checkboxes[i].checked) {
+        currentToDos.splice(i, 1);
+        checkboxes[i].checked = false;
+      };
+    };
+    this.setState({todos: currentToDos});
   },
   eachTodo: function(todo, i) {
     return (
@@ -64,6 +101,14 @@ var List = React.createClass({
         key={i}>
         {todo}
       </ToDo>
+    );
+  },
+  eachCompleted: function(completeItem, i) {
+    return (
+      <CompleteToDos
+        key={i}>
+        {completeItem}
+      </CompleteToDos>
     );
   },
   render: function() {
@@ -83,6 +128,13 @@ var List = React.createClass({
           type="submit"
           value="Remove selected"
           onClick={this.remove} />
+        <input
+          type="submit"
+          value="Mark as complete"
+          onClick={this.markComplete} />
+        <ul>
+          {this.state.completedTodos.map(this.eachCompleted)}
+        </ul>
       </div>
     );
   }
