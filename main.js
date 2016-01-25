@@ -54,34 +54,17 @@ var List = React.createClass({
 
 
   remove: function() {
-    var elementsToRemove = [];
     var array = this.state.todos;
     var checkboxes = document.getElementsByClassName('checkbox');
-
-
-console.log(array[0])
-console.log(checkboxes[0].key)
-console.log('')
-
-
     for (i=checkboxes.length-1; i>=0; i--) {
-      console.log(checkboxes[i].checked)
       if (checkboxes[i].checked) {
-        array.splice(i, 1)
-        console.log(array)
-        console.log(checkboxes)
+        array.splice(i, 1);
+        if (i===0) {
+          checkboxes[i].checked = false;
+        };
       };
     };
-
-    
-
-
-
     this.setState({todos: array});
-
-
-        
-      console.log(this.state.todos)
   },
   
 
@@ -112,7 +95,7 @@ console.log('')
         </ul>
         <input
           type="submit"
-          value="Remove"
+          value="Remove selected"
           onClick={this.remove} />
       </div>
     );
