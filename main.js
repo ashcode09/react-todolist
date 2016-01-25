@@ -1,6 +1,20 @@
 var ToDo = React.createClass({
+  getInitialState: function() {
+    return {
+      editing: false
+    }
+  },
 
-  render: function() {
+  edit: function() {
+    console.log(this.state.editing)
+    this.setState({editing: true});
+  },
+
+  save: function() {
+    this.setState({editing: false});
+  },
+
+  renderEditing: function() {
     return (
       <li
         className="to-do-component">
@@ -9,7 +23,13 @@ var ToDo = React.createClass({
             <tr>
               <td
                 className="to-do-value">
-                {this.props.children}
+                <input
+                  type="text"
+                  value={this.props.children} />
+                <input
+                  type="submit"
+                  value="Save"
+                  onClick={this.save} />
               </td>
               <td>
                 <input
@@ -21,6 +41,37 @@ var ToDo = React.createClass({
         </table>
       </li>
     );
+  },
+
+  render: function() {
+    if (this.state.editing === true) {
+      return this.renderEditing();
+    } else {
+      return (
+        <li
+          className="to-do-component">
+          <table>
+            <tbody>
+              <tr>
+                <td
+                  className="to-do-value">
+                  {this.props.children}
+                  <input
+                    type="submit"
+                    value="Edit"
+                    onClick={this.edit} />
+                </td>
+                <td>
+                  <input
+                    className="checkbox"
+                    type="checkbox" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
+      );
+    };
   }
 });
 
@@ -119,6 +170,7 @@ var List = React.createClass({
           value="Add"
           onClick={this.add} />
         <ul>
+          Still to Do
           {this.state.todos.map(this.eachTodo)}
         </ul>
         <input
@@ -130,6 +182,7 @@ var List = React.createClass({
           value="Mark as complete"
           onClick={this.markComplete} />
         <ul>
+          Completed
           {this.state.completedTodos.map(this.eachCompleted)}
         </ul>
       </div>
