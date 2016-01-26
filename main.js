@@ -1,91 +1,23 @@
-var ToDo = React.createClass({
-  getInitialState: function() {
-    return {
-      editing: false, 
-      inputValue: this.props.children
-    };
+var EachToDoComponent = React.createClass({
+  propTypes: {
+    checkboxVarName: React.PropTypes.string
   },
-  edit: function() {
-    console.log(this.state.editing)
-    this.setState({editing: true});
+
+
+  componentWillMount: function() {
+    console.log('the each to do stuff will mount')
   },
-  save: function() {
-    console.log(this.props.children)
-    this.setState({editing: false});
-  },
-  onChange: function(element) {
-    this.setState({ inputValue: element.target.value });
+
+  componentDidMount: function() {
+    console.log('the each stuff stuff has mounted')
   },
 
 
 
 
 
-  renderEditing: function() {
-    return (
-      <li
-        className="to-do-component">
-        <table>
-          <tbody>
-            <tr>
-              <td
-                className="to-do-value">
-                <textarea 
-                  ref="newText"
-                  defaultValue={this.state.inputValue}
-                  onChange={this.onChange} />
-                <input
-                  type="submit"
-                  value="Save"
-                  onClick={this.save} />
-              </td>
-              <td>
-                <input
-                  className="checkbox"
-                  type="checkbox" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </li>
-    );
-  },
-  renderSaved: function() {
-    return (
-      <li
-        className="to-do-component">
-        <table>
-          <tbody>
-            <tr>
-              <td
-                className="to-do-value">
-                {this.state.inputValue}
-                <input
-                  type="submit"
-                  value="Edit"
-                  onClick={this.edit} />
-              </td>
-              <td>
-                <input
-                  className="checkbox"
-                  type="checkbox" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </li>
-    );
-  },
-  render: function() {
-    if (this.state.editing === true) {
-      return this.renderEditing();
-    } else {
-      return this.renderSaved();
-    };
-  }
-});
 
-var CompleteToDos = React.createClass({
+
   render: function() {
     return (
       <li
@@ -99,7 +31,7 @@ var CompleteToDos = React.createClass({
               </td>
               <td>
                 <input
-                  className="completedCheckbox"
+                  className={this.props.checkboxVarName}
                   type="checkbox" />
               </td>
             </tr>
@@ -110,6 +42,137 @@ var CompleteToDos = React.createClass({
   }
 });
 
+
+
+var ToDo = React.createClass({
+  getInitialState: function() {
+    return {
+      editing: false,
+      editedToDo: ''
+    };
+  },
+
+  componentWillMount: function() {
+    console.log('the to dos will mount')
+  },
+
+  componentDidMount: function() {
+    console.log('the to do stuff has mounted')
+  },
+
+
+
+  edit: function() {
+    this.setState({editing: true});
+  },
+
+
+
+
+
+
+
+
+  save: function(key) {
+    
+    console.log('HERE')
+    console.log('children: ' + this.props.children)
+    console.log('currentToDosList: ' + this.props.currentToDosList)
+    console.log('HERE')
+
+
+    this.props.callbackParent(this.state.currentToDosList);
+
+
+
+    this.setState({editing: false});
+  },
+
+
+
+
+  whenChanged: function(element) {
+    console.log(element.target.value)
+    this.setState({currentToDosList: element.target.value});
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  renderEditing: function() {
+    return (
+      <EachToDoComponent  checkboxVarName="checkbox">
+        <input 
+          ref="newText"
+          defaultValue={this.props.children}
+          onChange={this.whenChanged} />
+        <button
+          className="fa fa-floppy-o"
+          type="submit"
+          onClick={this.save}></button>
+      </EachToDoComponent>
+    );
+  },
+  renderSaved: function() {
+    return (
+      <EachToDoComponent  checkboxVarName="checkbox">
+        {this.props.children}
+        <button
+          className="fa fa-pencil"
+          type="submit"
+          onClick={this.edit}></button>
+      </EachToDoComponent>
+    );
+  },
+  render: function() {
+    console.log('rendering to do component')
+    if (this.state.editing === true) {
+      return this.renderEditing();
+    } else {
+      return this.renderSaved();
+    };
+  }
+});
+
+
+
+
+
+
+
+
+
+
+var CompleteToDos = React.createClass({
+  render: function() {
+    return (
+      <EachToDoComponent checkboxVarName="completedCheckbox">
+        {this.props.children}
+      </EachToDoComponent>
+    );
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 var List = React.createClass({
   getInitialState: function() {
     return {
@@ -117,6 +180,24 @@ var List = React.createClass({
       completedTodos: []
     };
   },
+
+
+
+
+
+  componentDidMount: function() {
+    console.log('the list has mounted')
+  },
+
+
+
+
+  componentWillMount: function() {
+    console.log('the list will mount')
+  },
+
+
+
   add: function() {
     var addToList = document.getElementById('newTodoToAdd').value;
     if (addToList !== "") {
@@ -126,24 +207,33 @@ var List = React.createClass({
         this.forceUpdate();
       });
     };
+    console.log('List.add')
   },
   markComplete: function() {
+    console.log('what am i doing')
     var completedTasks = this.state.completedTodos, currentToDos = this.state.todos, checkboxes = document.getElementsByClassName('checkbox');
     for (i=checkboxes.length-1; i>=0; i--) {
       if (checkboxes[i].checked) {
         completedTasks.push(currentToDos[i]);
         currentToDos.splice(i, 1);
-        checkboxes[i].checked = false;
+        // checkboxes[i].checked = false;
+
+        
       };
     };
     this.setState({completedTodos: completedTasks});
-    this.setState({todos: currentToDos});
+    this.setState({todos: currentToDos}, function() {
+      this.forceUpdate();
+    });
+    console.log('List.markComplete')
+    console.log('todos: ' + this.state.todos)
+    console.log('completed: ' + this.state.completedTodos)
   },
   removeFromToDoAndCompleted: function(checkboxVarName, stateToUpdate, newState) {
     for (i=checkboxVarName.length-1; i>=0; i--) {
       if (checkboxVarName[i].checked) {
         newState.splice(i, 1);
-        checkboxVarName[i].checked = false;
+        // checkboxVarName[i].checked = false;
       };
     };
     this.setState({stateToUpdate: newState});
@@ -153,9 +243,54 @@ var List = React.createClass({
     this.removeFromToDoAndCompleted(checkboxes, 'todos', currentToDos);
     this.removeFromToDoAndCompleted(completedCheckboxes, 'completedTodos', currentCompletedTodos);
   },
+
+
+
+
+
+
+
+
+
+
+
+  onChildChanged: function(i, newState) {
+    console.log('i=' + i)
+    console.log('newState=' + newState)
+    this.state.todos[i] = newState
+    console.log(this.state.todos)
+    this.forceUpdate()
+  },
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
   eachTodo: function(todo, i) {
     return (
       <ToDo
+
+
+
+
+
+
+        callbackParent={this.onChildChanged.bind(this, i)}
+
+
+
+        currentToDosList={this.state.todos}
+
         key={i}>
         {todo}
       </ToDo>
@@ -175,22 +310,22 @@ var List = React.createClass({
         <input
           id="newTodoToAdd"
           type="text" />
-        <input
+        <button
+          className="fa fa-plus"
           type="submit"
-          value="Add"
-          onClick={this.add} />
+          onClick={this.add}></button>
         <ul>
           Still to Do
           {this.state.todos.map(this.eachTodo)}
         </ul>
-        <input
+        <button
+          className="fa fa-times"
           type="submit"
-          value="Remove selected"
-          onClick={this.remove} />
-        <input
+          onClick={this.remove}></button>
+        <button
+          className="fa fa-check"
           type="submit"
-          value="Mark as complete"
-          onClick={this.markComplete} />
+          onClick={this.markComplete}></button>
         <ul>
           Completed
           {this.state.completedTodos.map(this.eachCompleted)}
