@@ -116,6 +116,7 @@ var List = React.createClass({
     };
   },
   add: function() {
+    console.log('hello')
     var addToList = document.getElementById('newTodoToAdd').value;
     if (addToList !== "") {
       var toDoList = this.state.todos.concat([addToList])
@@ -159,6 +160,19 @@ var List = React.createClass({
     this.state.todos[i] = newState
     this.forceUpdate()
   },
+  viewList: function(idOfListToView) {
+    var eachList = document.getElementsByClassName('to-do-lists');
+    for (i=0; i<eachList.length; i++) {
+      eachList[i].style.display = 'none';
+    };
+    document.getElementById(idOfListToView).style.display = 'block';
+  },
+  viewToDoList: function() {
+    this.viewList('toDoView');
+  },
+  viewCompletedList: function() {
+    this.viewList('completedToDoView');
+  },
   eachTodo: function(todo, i) {
     return (
       <ToDo
@@ -186,23 +200,39 @@ var List = React.createClass({
         <button
           className="fa fa-plus"
           type="submit"
-          onClick={this.add}></button>
-        <ul>
+          onClick={this.add}>
+        </button>
+        <button
+          onClick={this.viewToDoList}>
+          Still To Do
+        </button>
+        <button
+          onClick={this.viewCompletedList}
+          >
+          Completed
+        </button>
+        <ul
+          id="toDoView"
+          className="to-do-lists">
           Still to Do
           {this.state.todos.map(this.eachTodo)}
+        </ul>
+        <ul
+          id="completedToDoView"
+          className="to-do-lists hidden-on-load">
+          Completed
+          {this.state.completedTodos.map(this.eachCompleted)}
         </ul>
         <button
           className="fa fa-times"
           type="submit"
-          onClick={this.remove}></button>
+          onClick={this.remove}>
+        </button>
         <button
           className="fa fa-check"
           type="submit"
-          onClick={this.markComplete}></button>
-        <ul>
-          Completed
-          {this.state.completedTodos.map(this.eachCompleted)}
-        </ul>
+          onClick={this.markComplete}>
+        </button>
       </div>
     );
   }

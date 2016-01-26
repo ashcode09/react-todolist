@@ -8,3 +8,7 @@
 	max-width: 200px;
 	word-break: break-all;
 }
+
+.hidden-on-load {
+	display: none;
+}
