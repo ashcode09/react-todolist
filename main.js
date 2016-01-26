@@ -2,22 +2,6 @@ var EachToDoComponent = React.createClass({
   propTypes: {
     checkboxVarName: React.PropTypes.string
   },
-
-
-  componentWillMount: function() {
-    console.log('the each to do stuff will mount')
-  },
-
-  componentDidMount: function() {
-    console.log('the each stuff stuff has mounted')
-  },
-
-
-
-
-
-
-
   render: function() {
     return (
       <li
@@ -51,64 +35,16 @@ var ToDo = React.createClass({
       editedToDo: ''
     };
   },
-
-  componentWillMount: function() {
-    console.log('the to dos will mount')
-  },
-
-  componentDidMount: function() {
-    console.log('the to do stuff has mounted')
-  },
-
-
-
   edit: function() {
     this.setState({editing: true});
   },
-
-
-
-
-
-
-
-
   save: function(key) {
-    
-    console.log('HERE')
-    console.log('children: ' + this.props.children)
-    console.log('currentToDosList: ' + this.props.currentToDosList)
-    console.log('HERE')
-
-
     this.props.callbackParent(this.state.currentToDosList);
-
-
-
     this.setState({editing: false});
   },
-
-
-
-
   whenChanged: function(element) {
-    console.log(element.target.value)
     this.setState({currentToDosList: element.target.value});
   },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   renderEditing: function() {
     return (
       <EachToDoComponent  checkboxVarName="checkbox">
@@ -135,7 +71,6 @@ var ToDo = React.createClass({
     );
   },
   render: function() {
-    console.log('rendering to do component')
     if (this.state.editing === true) {
       return this.renderEditing();
     } else {
@@ -180,24 +115,6 @@ var List = React.createClass({
       completedTodos: []
     };
   },
-
-
-
-
-
-  componentDidMount: function() {
-    console.log('the list has mounted')
-  },
-
-
-
-
-  componentWillMount: function() {
-    console.log('the list will mount')
-  },
-
-
-
   add: function() {
     var addToList = document.getElementById('newTodoToAdd').value;
     if (addToList !== "") {
@@ -207,16 +124,14 @@ var List = React.createClass({
         this.forceUpdate();
       });
     };
-    console.log('List.add')
   },
   markComplete: function() {
-    console.log('what am i doing')
     var completedTasks = this.state.completedTodos, currentToDos = this.state.todos, checkboxes = document.getElementsByClassName('checkbox');
     for (i=checkboxes.length-1; i>=0; i--) {
       if (checkboxes[i].checked) {
         completedTasks.push(currentToDos[i]);
         currentToDos.splice(i, 1);
-        // checkboxes[i].checked = false;
+        checkboxes[i].checked = false;
 
         
       };
@@ -225,15 +140,12 @@ var List = React.createClass({
     this.setState({todos: currentToDos}, function() {
       this.forceUpdate();
     });
-    console.log('List.markComplete')
-    console.log('todos: ' + this.state.todos)
-    console.log('completed: ' + this.state.completedTodos)
   },
   removeFromToDoAndCompleted: function(checkboxVarName, stateToUpdate, newState) {
     for (i=checkboxVarName.length-1; i>=0; i--) {
       if (checkboxVarName[i].checked) {
         newState.splice(i, 1);
-        // checkboxVarName[i].checked = false;
+        checkboxVarName[i].checked = false;
       };
     };
     this.setState({stateToUpdate: newState});
@@ -243,54 +155,15 @@ var List = React.createClass({
     this.removeFromToDoAndCompleted(checkboxes, 'todos', currentToDos);
     this.removeFromToDoAndCompleted(completedCheckboxes, 'completedTodos', currentCompletedTodos);
   },
-
-
-
-
-
-
-
-
-
-
-
   onChildChanged: function(i, newState) {
-    console.log('i=' + i)
-    console.log('newState=' + newState)
     this.state.todos[i] = newState
-    console.log(this.state.todos)
     this.forceUpdate()
   },
-  
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
   eachTodo: function(todo, i) {
     return (
       <ToDo
-
-
-
-
-
-
         callbackParent={this.onChildChanged.bind(this, i)}
-
-
-
         currentToDosList={this.state.todos}
-
         key={i}>
         {todo}
       </ToDo>
